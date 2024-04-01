@@ -14,12 +14,12 @@ public class RunBoard {
 	final int SIGN_OUT = 2;
 	final int LOG_IN = 3;
 	final int LOG_OUT = 4;
-	
+
 	private boolean isRun = true;
-	
+
 	UserManager userManager = new UserManager();
 	BoardManager boardManager = new BoardManager();
-	
+
 	private void showMenu() {
 		System.out.println("===게시판===");
 		System.out.println("1) 회원가입");
@@ -28,14 +28,20 @@ public class RunBoard {
 		System.out.println("4) 로그아웃");
 		System.out.println("0) 종료");
 	}
-	
+
 	private void signIn() {
 		String id = inputString("아이디");
 		String pw = inputString("비밀번호");
-		
-		userManager.createUser();
+		String nickName = inputString("닉네임");
+
+		User user = userManager.createUser(id, pw, nickName);
+
+		userManager.list.add(user);
+
+		printCompleteMessage(user);
+
 	}
-	
+
 	private void runMenu(int select) {
 		switch (select) {
 		case SIGN_IN:
@@ -80,8 +86,14 @@ public class RunBoard {
 		return number;
 	}
 
+	private void printCompleteMessage(User user) {
+		String message = user.getId() != null ? String.format("%s(%s) 회원님 환영합니다.", user.nickName, user.getId())
+				: "회원가입 실패";
+		System.out.printf(message);
+	}
+
 	public void run() {
-		while(isRun) {
+		while (isRun) {
 			int select = inputNumber("메뉴 선택");
 			runMenu(select);
 		}

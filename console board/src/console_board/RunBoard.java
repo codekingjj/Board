@@ -51,7 +51,6 @@ public class RunBoard {
 		boolean result = false;
 		if (user.getPw().equals(pw)) {
 			result = userManager.deleteUser(user);
-			System.out.println("1");
 		}
 		String message = result ? "회원 탈퇴 완료" : "회원 탈퇴 실패";
 		if (result) {

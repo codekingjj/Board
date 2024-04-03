@@ -7,13 +7,14 @@ public class User {
 
 	}
 
-	public User(String id, String pw) {
+	public User(String id, String pw, String nickName) {
 		this.id = id;
 		this.pw = pw;
+		this.nickName = nickName;
 	}
 
 	public User userClone() {
-		return new User(this.id, this.pw);
+		return new User(this.id, this.pw, this.nickName);
 	}
 
 	public String getNickName() {

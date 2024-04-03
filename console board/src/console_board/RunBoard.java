@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class RunBoard {
 	public RunBoard() {
-		showMenu();
+
 	}
 
 	Scanner scan = new Scanner(System.in);
@@ -14,6 +14,9 @@ public class RunBoard {
 	final int SIGN_OUT = 2;
 	final int LOG_IN = 3;
 	final int LOG_OUT = 4;
+
+	int log;
+	String nickName;
 
 	private boolean isRun = true;
 
@@ -36,10 +39,47 @@ public class RunBoard {
 
 		User user = userManager.createUser(id, pw, nickName);
 
-		userManager.list.add(user);
-
 		printCompleteMessage(user);
 
+	}
+
+	private void signOut() {
+		String pw = inputString("비밀번호");
+
+		User user = userManager.findUserByNickName(nickName);
+
+		boolean result = false;
+		if (user.getPw().equals(pw)) {
+			result = userManager.deleteUser(user);
+			System.out.println("1");
+		}
+		String message = result ? "회원 탈퇴 완료" : "회원 탈퇴 실패";
+		if (result) {
+			nickName = "";
+			log = 0;
+		}
+		System.out.println(message);
+	}
+
+	private void logIn() {
+		String id = inputString("아이디");
+		String pw = inputString("비밀번호");
+
+		User user = userManager.findUserById(id);
+
+		if (user.getPw().equals(pw)) {
+			log = 1;
+			nickName = user.getNickName();
+			System.out.printf("%s님, 로그인 되었습니다\n.", nickName);
+		} else {
+			System.out.println("아이디 혹은 비밀번호가 일치하지 않습니다.");
+		}
+	}
+
+	private void logOut() {
+		log = 0;
+		nickName = "";
+		System.out.println("로그아웃 되었습니다.");
 	}
 
 	private void runMenu(int select) {
@@ -48,15 +88,15 @@ public class RunBoard {
 			signIn();
 			break;
 		case SIGN_OUT:
-//			signOut();
+			signOut();
 			break;
 
 		case LOG_IN:
-//			logIn();
+			logIn();
 			break;
 
 		case LOG_OUT:
-//			logOut();
+			logOut();
 			break;
 
 		case EXIT:
@@ -87,13 +127,16 @@ public class RunBoard {
 	}
 
 	private void printCompleteMessage(User user) {
-		String message = user.getId() != null ? String.format("%s(%s) 회원님 환영합니다.", user.nickName, user.getId())
-				: "회원가입 실패";
+		String message = user.getId() != null ? String.format("%s(%s) 회원님 환영합니다.\n", user.nickName, user.getId())
+				: "회원가입 실패\n";
 		System.out.printf(message);
 	}
 
 	public void run() {
 		while (isRun) {
+			showMenu();
+			System.out.println(nickName);		//검수용
+			System.out.println(userManager.list);//검수용
 			int select = inputNumber("메뉴 선택");
 			runMenu(select);
 		}

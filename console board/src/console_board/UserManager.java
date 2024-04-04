@@ -44,7 +44,7 @@ public class UserManager {
 	public User findUserByNickName(String nickName) {
 		for (User user : list) {
 			if (user.getNickName().equals(nickName)) {
-				return user.userClone();
+				return user;
 			}
 		}
 		return new User();

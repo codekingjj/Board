@@ -33,6 +33,11 @@ public class RunBoard {
 	}
 
 	private void signIn() {
+		checkLog();
+		if (checkLog()) {
+			System.out.println("로그아웃 상태에서 이용가능한 서비스 입니다.");
+			return;
+		}
 		String id = inputString("아이디");
 		String pw = inputString("비밀번호");
 		String nickName = inputString("닉네임");
@@ -44,6 +49,11 @@ public class RunBoard {
 	}
 
 	private void signOut() {
+		checkLog();
+		if (!checkLog()) {
+			System.out.println("로그아웃 상태에서 이용가능한 서비스 입니다.");
+			return;
+		}
 		String pw = inputString("비밀번호");
 
 		User user = userManager.findUserByNickName(nickName);
@@ -61,6 +71,11 @@ public class RunBoard {
 	}
 
 	private void logIn() {
+		checkLog();
+		if (checkLog()) {
+			System.out.println("로그아웃 상태에서 이용가능한 서비스 입니다.");
+			return;
+		}
 		String id = inputString("아이디");
 		String pw = inputString("비밀번호");
 
@@ -76,6 +91,11 @@ public class RunBoard {
 	}
 
 	private void logOut() {
+		checkLog();
+		if (!checkLog()) {
+			System.out.println("로그아웃 상태에서 이용가능한 서비스 입니다.");
+			return;
+		}
 		log = 0;
 		nickName = "";
 		System.out.println("로그아웃 되었습니다.");
@@ -130,7 +150,15 @@ public class RunBoard {
 				: "회원가입 실패\n";
 		System.out.printf(message);
 	}
-
+	
+	private boolean checkLog() {
+		if (log == 1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
 	public void run() {
 		while (isRun) {
 			showMenu();

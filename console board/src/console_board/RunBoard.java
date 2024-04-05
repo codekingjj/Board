@@ -1,5 +1,7 @@
 package console_board;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class RunBoard {
@@ -11,9 +13,9 @@ public class RunBoard {
 
 	final int EXIT = 0;
 	final int SIGN_IN = 1;
-	final int SIGN_OUT = 2;
-	final int LOG_IN = 3;
-	final int LOG_OUT = 4;
+	final int SIGN_OUT = 6;
+	final int LOG_IN = 2;
+	final int LOG_OUT = 5;
 
 	int log;
 	String nickName;
@@ -26,9 +28,7 @@ public class RunBoard {
 	private void showMenu() {
 		System.out.println("===게시판===");
 		System.out.println("1) 회원가입");
-		System.out.println("2) 회원탈퇴");
-		System.out.println("3) 로그인");
-		System.out.println("4) 로그아웃");
+		System.out.println("2) 로그인");
 		System.out.println("0) 종료");
 	}
 
@@ -84,7 +84,7 @@ public class RunBoard {
 		if (user.getPw().equals(pw)) {
 			log = 1;
 			nickName = user.getNickName();
-			System.out.printf("%s님, 로그인 되었습니다\n.", nickName);
+			System.out.printf("%s님, 로그인 되었습니다.\n", nickName);
 		} else {
 			System.out.println("아이디 혹은 비밀번호가 일치하지 않습니다.");
 		}
@@ -101,27 +101,67 @@ public class RunBoard {
 		System.out.println("로그아웃 되었습니다.");
 	}
 
+	private void showBoard() {
+
+		for (Board board : boardManager.boardList) {
+			System.out.println(board);
+		}
+
+		System.out.println("1) 게시글 작성");
+		System.out.println("2) 게시글 조회");
+		System.out.println("3) 게시글 삭제");
+		System.out.println("4) 게시글 수정");
+		System.out.println("5) 로그아웃");
+		System.out.println("6) 회원탈퇴");
+
+		int select = scan.nextInt();
+
+		runboard(select);
+	}
+
+	private void runboard(int select) {
+		switch (select) {
+		case 1:
+			writeContents();
+			break;
+		case 2:
+//			searchContents();
+			break;
+		case 3:
+//			deleteContents();
+			break;
+		case 4:
+//			fixContents();
+			break;
+		case LOG_OUT:
+			logOut();
+			break;
+		case SIGN_OUT:
+			signOut();
+			break;
+		}
+	}
+
+	private void writeContents() {
+		String title = inputString("제목");
+		String contents = inputString("내용");
+		String writer = nickName;
+
+		Board board = new Board(title, contents, writer);
+		boardManager.boardList.add(board);
+	}
+
 	private void runMenu(int select) {
 		switch (select) {
 		case SIGN_IN:
 			signIn();
 			break;
-		case SIGN_OUT:
-			signOut();
-			break;
-
 		case LOG_IN:
 			logIn();
 			break;
-
-		case LOG_OUT:
-			logOut();
-			break;
-
 		case EXIT:
 			isRun = false;
 			break;
-
 		}
 	}
 
@@ -150,22 +190,26 @@ public class RunBoard {
 				: "회원가입 실패\n";
 		System.out.printf(message);
 	}
-	
+
 	private boolean checkLog() {
 		if (log == 1) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	public void run() {
 		while (isRun) {
-			showMenu();
-			System.out.println(nickName);		//검수용
-			System.out.println(userManager.list);//검수용
-			int select = inputNumber("메뉴 선택");
-			runMenu(select);
+			if (log == 1) {
+				showBoard();
+			} else {
+				showMenu();
+//			System.out.println(nickName); // 검수용
+//			System.out.println(userManager.list);// 검수용
+				int select = inputNumber("메뉴 선택");
+				runMenu(select);
+			}
 		}
 	}
 }

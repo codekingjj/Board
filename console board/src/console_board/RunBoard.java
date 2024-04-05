@@ -125,7 +125,7 @@ public class RunBoard {
 			writeContents();
 			break;
 		case 2:
-//			searchContents();
+			searchContents();
 			break;
 		case 3:
 //			deleteContents();
@@ -149,6 +149,14 @@ public class RunBoard {
 
 		Board board = new Board(title, contents, writer);
 		boardManager.boardList.add(board);
+	}
+	
+	private void searchContents() {
+		for (Board board : boardManager.boardList) {
+			if (nickName.equals(board.nickName)) {
+				System.out.println(board);
+			}
+		}
 	}
 
 	private void runMenu(int select) {
